@@ -1,0 +1,253 @@
+{
+  "name": "AI-Powered Lead Generation Email Automation",
+  "nodes": [
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        960,
+        240
+      ],
+      "id": "6f78befa-cae3-4082-a416-47be9aaceb19",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "letxjQsr5D4uHkpk",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "130ccc72-d61d-416e-8465-89457eee8b92",
+      "name": "Manual Trigger"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1-nZigPwI2Yv6UFwJaUQ_9GV4KKA4m0LVFBu2bR-OHGA/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1-nZigPwI2Yv6UFwJaUQ_9GV4KKA4m0LVFBu2bR-OHGA/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        208,
+        0
+      ],
+      "id": "88e1cb8c-37ae-45d3-9abd-f8b332c749c7",
+      "name": "Read Company data",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "J6Rue712qJf3rSHB",
+          "name": "Google Sheets account 5"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        416,
+        0
+      ],
+      "id": "c0362f63-ca97-4110-89b6-0f76bb31e60e",
+      "name": "Process each Company"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an AI sales assistant.\n\nCompany:\n{{$json.Company}}\n\nIndustry:\n{{$json.Industry}}\n\nWrite a professional cold email introducing AI automation services.\n\nMaximum 120 words.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        1088,
+        32
+      ],
+      "id": "3f539590-4afb-4a6a-950f-babd4fcb24d3",
+      "name": "Generate AI Email"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1-nZigPwI2Yv6UFwJaUQ_9GV4KKA4m0LVFBu2bR-OHGA/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 645183386,
+          "mode": "list",
+          "cachedResultName": "Generated Emails",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1-nZigPwI2Yv6UFwJaUQ_9GV4KKA4m0LVFBu2bR-OHGA/edit#gid=645183386"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Company": "={{ $('Process each Company').item.json.Company }}",
+            "Generated Emails": "={{ $json.output }}",
+            "Industry": "={{ $('Process each Company').item.json.Industry }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Company",
+              "displayName": "Company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Industry",
+              "displayName": "Industry",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Generated Emails",
+              "displayName": "Generated Emails",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1440,
+        32
+      ],
+      "id": "2abd1723-d512-4a51-bd54-2c6a75a9cffb",
+      "name": "Saved to Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "J6Rue712qJf3rSHB",
+          "name": "Google Sheets account 5"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Generate AI Email",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Read Company data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Company data": {
+      "main": [
+        [
+          {
+            "node": "Process each Company",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process each Company": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Process each Company",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Generate AI Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate AI Email": {
+      "main": [
+        [
+          {
+            "node": "Saved to Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "8209b2ed-cd1d-4fd9-a3d3-3e0952d7fbb7",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cfd24de39f46dadd3d5f6088a10b5a80f18fd55bf35b58fbeb34c09ddd050ec0"
+  },
+  "nodeGroups": [],
+  "id": "Naka1HNNgOzqnpI0",
+  "tags": []
+}
