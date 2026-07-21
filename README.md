@@ -10,12 +10,12 @@ The workflow reads company information from Google Sheets, processes each compan
 
 ## Features
 
-- 📄 Reads company data from Google Sheets
-- 🔄 Processes each company individually
-- 🤖 Uses OpenAI GPT-5 Mini to generate personalized emails
-- 📧 Creates AI-powered cold outreach emails
-- 💾 Saves generated emails back into Google Sheets
-- ⚡ Fully automated no-code workflow
+-  Reads company data from Google Sheets
+-  Processes each company individually
+-  Uses OpenAI GPT-5 Mini to generate personalized emails
+-  Creates AI-powered cold outreach emails
+-  Saves generated emails back into Google Sheets
+-  Fully automated no-code workflow
 
 ---
 
