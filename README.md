@@ -1,4 +1,6 @@
-<img width="673" height="362" alt="image" src="https://github.com/user-attachments/assets/55d526a7-4460-48c6-affb-2f3a8874779d" /># AI-Powered Lead Generation Automation using n8n
+<img width="673" height="362" alt="image" src="https://github.com/user-attachments/assets/55d526a7-4460-48c6-affb-2f3a8874779d" />
+
+# AI-Powered Lead Generation Automation using n8n
 
 ## Project Overview
 
@@ -47,7 +49,7 @@ Google Sheets
 
 ### Workflow
 
-![Workflow](workflow.png)
+![workflow](workflow.png)
 
 ### AI Generated Email
 
